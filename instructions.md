@@ -120,7 +120,12 @@ Before continuing with this assignment, **one member of your team** should:
     git push --tags origin master
 ```
 
-4. After finishing these steps, you should now be able to run IronKernel by executing:
+5. In the ps4 directory, get the rust-core module by doing:
+```bash
+    git submodule update --init
+```
+
+6. After finishing these steps, you should now be able to run IronKernel by executing:
 ```bash
     make run
 ```
