@@ -1,0 +1,11 @@
+**/boot/*.o
+**/boot/*.bc
+**/boot/lib*.rlib
+**/boot/*.ll
+
+**/boot/*.elf
+**/boot/*.bin
+**/boot/*.img
+**/boot/*.embed
+
+**/boot/*.d
