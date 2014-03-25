@@ -8,6 +8,8 @@
 #[no_std];
 #[feature(asm, globs, macro_rules)];
 
+#[allow(attribute_usage)];
+#[allow(dead_code)];
 extern mod core;
 
 #[cfg(target_arch = "arm")]

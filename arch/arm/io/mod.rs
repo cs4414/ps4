@@ -12,13 +12,16 @@ pub static UART0_IMSC: *mut u32 = (0x101f1000 + 0x038) as *mut u32;
 #[allow(dead_code)]
 pub static VIC_INTENABLE: *mut u32 = (0x10140000 + 0x010) as *mut u32;
 
+// These store the current position of the cursor
 pub static mut CURSOR_X: u32 = 0;
 pub static mut CURSOR_Y: u32 = 0;
+// These are set by the bitmaps in ./font.rs
 pub static CURSOR_HEIGHT: u32 = 16;
 pub static CURSOR_WIDTH: u32 = 8;
-pub static mut CURSOR_COLOR: u32 = 0x000000FF;
-pub static mut FG_COLOR: u32 = 0x00FFFFFF;
-pub static mut BG_COLOR: u32 = 0xF0000000;
+// Colors have their own setters
+pub static mut CURSOR_COLOR: u32 = 0x00000000;
+pub static mut FG_COLOR: u32 = 0x00000000;
+pub static mut BG_COLOR: u32 = 0x00000000;
 pub static mut CURSOR_BUFFER: [u32, ..8*16] = [0x00FF0000, ..8*16];
 pub static mut SAVE_X: u32 = 0;
 pub static mut SAVE_Y: u32 = 0;
@@ -72,7 +75,6 @@ pub unsafe fn init(width: u32, height: u32)
     set_fg(0xFAFCFF);
     set_cursor_color(0xFAFCFF);
     fill_bg();	
-    sgash::drawstr(&"sgash > ");
     draw_cursor();
 }
 
@@ -99,7 +101,7 @@ pub unsafe fn scrollup()
 }
 pub unsafe fn draw_char(c: char)
 {
-    if CURSOR_X+(SCREEN_WIDTH*CURSOR_Y) >= SCREEN_WIDTH*SCREEN_HEIGHT
+    while CURSOR_X+(SCREEN_WIDTH*CURSOR_Y) >= SCREEN_WIDTH*SCREEN_HEIGHT
     {
 	scrollup();
     }
@@ -136,6 +138,10 @@ pub unsafe fn draw_char(c: char)
 
 pub unsafe fn backup()
 {
+    while CURSOR_X+(SCREEN_WIDTH*CURSOR_Y) >= SCREEN_WIDTH*SCREEN_HEIGHT
+    {
+	scrollup();
+    }
     let mut i = 0;
     let mut j = 0;
     while j < CURSOR_HEIGHT
